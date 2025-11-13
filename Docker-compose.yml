@@ -1,0 +1,38 @@
+version: '3.8'
+
+services: 
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: postgress
+      POSTGRES_USER: postgress
+      POSTGRES_PASSWORD: postgress
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 2m
+      timeout: 15s
+      retries: 20
+      start_period: 30s
+
+
+
+  web:
+    build: .
+    command: >
+      sh -c "set -ex &&
+             python manage.py makemigrations &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    environment:
+      - NAME=postgress
+      - USER=postgress
+      - PASSWORD=postgress
+      - HOST=postgres        
+      - PORT=5432 
+    depends_on:
+      postgres: 
+          condition: service_healthy
+
+

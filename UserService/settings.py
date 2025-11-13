@@ -25,14 +25,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-u#fu@9k5f00(6m)6m+3^uq1+wjd4t6517i2w8z6v*+ysm&g61d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
+
+CORS_ALLOWED_ORIGINS = ['http://localhost:3000']
+
+CORS_ALLOW_CREDENTIALS = True
 
 AUTH_USER_MODEL = 'users.User'
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,6 +49,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -79,12 +85,12 @@ WSGI_APPLICATION = 'UserService.wsgi.application'
 
 DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.getenv("NAME"),  # Replace with your database name
-            'USER': os.getenv("USER"),  # Replace with your MySQL username
-            'PASSWORD': os.getenv("PASSWORD"),  # Replace with your MySQL password
-            'HOST': os.getenv("HOST"),  # Or the IP address/hostname of your MySQL server
-            'PORT': os.getenv("PORT"),  # Or the port your MySQL server is running on
+            'ENGINE': 'django.db.backends.postgresql',#'django.db.backends.mysql',
+            'NAME': os.getenv("DB_NAME"),  # Replace with your database name
+            'USER': os.getenv("DB_USER"),  # Replace with your MySQL username
+            'PASSWORD': os.getenv("DB_PASSWORD"),  # Replace with your MySQL password
+            'HOST': os.getenv("DB_HOST"),  # Or the IP address/hostname of your MySQL server
+            'PORT': os.getenv("DB_PORT"),  # Or the port your MySQL server is running on 3306
         }
     }
 
