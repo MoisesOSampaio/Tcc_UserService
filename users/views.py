@@ -14,12 +14,12 @@ class Views:
         access_token : str = request.headers['Authorization'] 
         access_token = access_token.split(' ')[1]
         
-        print(access_token)
+        #print(access_token)
         body = {"token" : access_token}
-        print(body)
+        #print(body)
         validacao = requests.post(url=f'{os.getenv('AUTH_URL')}api/token/verify/', data=body)
         validacao = validacao.json()
-        print(f"validando:{validacao}")
+        #print(f"validando:{validacao}")
 
         if validacao != {}:
             return Response(validacao, status=status.HTTP_401_UNAUTHORIZED)
@@ -31,8 +31,9 @@ class CreateUserView(generics.CreateAPIView, Views):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-    def create(self, request, *args, **kwargs):
-        return self.verify_authentication(request, super().create)
+    def post(self, request, *args, **kwargs):
+        #print('oi')
+        return self.verify_authentication(request, self.create)
 
 
 
@@ -43,7 +44,7 @@ class GetUserView(generics.RetrieveAPIView, Views):
     lookup_field = 'pk'
 
     def get(self, request, *args, **kwargs):
-        return self.verify_authentication(request, super().get)
+        return self.verify_authentication(request, self.retrieve)
 
 
 
@@ -53,6 +54,6 @@ class PatchUserView(generics.UpdateAPIView, Views):
     lookup_field = 'pk'
 
     def patch(self, request, *args, **kwargs):
-        return self.verify_authentication(request, super().patch)
+        return self.verify_authentication(request, self.partial_update)
 
     
