@@ -36,7 +36,12 @@ class CreateUserView(generics.CreateAPIView, Views):
         return self.verify_authentication(request, self.create)
 
 
+class GetAllView(generics.ListAPIView, Views):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
+    def get(self, request, *args, **kwargs):
+        return self.verify_authentication(request, self.list)
 
 class GetUserView(generics.RetrieveAPIView, Views):
     queryset = User.objects.all()
